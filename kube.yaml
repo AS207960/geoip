@@ -101,3 +101,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: geoip-rpc-conf
+            - secretRef:
+                name: geoip-rpc-creds
