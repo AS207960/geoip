@@ -20,6 +20,13 @@ data:
   GEOIPUPDATE_PRESERVE_FILE_TIMES: "1"
   GEOIPUPDATE_FREQUENCY: "1"
 ---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: geoip-rpc-conf
+data:
+  GEOIP_DATA_FILE: "/data/GeoLite2-City.mmdb"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,3 +65,39 @@ spec:
             - secretRef:
                 name: geoip-updater-creds
               prefix: "GEOIPUPDATE_"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geoip-rpc
+  labels:
+    app: geoip
+    part: rpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geoip
+      part: rpc
+  template:
+    metadata:
+      annotations:
+        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
+      labels:
+        app: geoip
+        part: rpc
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: geoip-data
+      containers:
+        - name: updater
+          image: as207960/geoip:1
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/data"
+              name: data
+          envFrom:
+            - configMapRef:
+                name: geoip-rpc-conf

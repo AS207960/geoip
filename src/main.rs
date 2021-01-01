@@ -34,16 +34,16 @@ fn main() {
     let mut watcher = notify::watcher(watcher_tx, std::time::Duration::from_secs(10)).unwrap();
 
     let mmdb_reader = std::sync::Arc::new(std::sync::Mutex::new(
-        maxminddb::Reader::open_readfile(std::env::var("GEOIP_DATA_FILE")).unwrap()
+        maxminddb::Reader::open_readfile(std::env::var("GEOIP_DATA_FILE").unwrap()).unwrap()
     ));
     let watcher_mmdb_reader = mmdb_reader.clone();
-    watcher.watch(std::env::var("GEOIP_DATA_FILE"), notify::RecursiveMode::NonRecursive).unwrap();
+    watcher.watch(std::env::var("GEOIP_DATA_FILE").unwrap(), notify::RecursiveMode::NonRecursive).unwrap();
 
     std::thread::spawn(|| {
         db_watcher_thread(watcher_mmdb_reader, watcher_rx)
     });
 
-    let mut amqp_connection = amiquip::Connection::insecure_open(std::env::var("RABBITMQ_RPC_URL")).unwrap();
+    let mut amqp_connection = amiquip::Connection::insecure_open(&std::env::var("RABBITMQ_RPC_URL").unwrap()).unwrap();
     let amqp_channel = amqp_connection.open_channel(None).unwrap();
 
     let rpc_queue = amqp_channel.queue_declare("geoip_rpc", amiquip::QueueDeclareOptions {
