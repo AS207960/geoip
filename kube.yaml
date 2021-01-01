@@ -1,0 +1,60 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: geoip-data
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: geoip-updater-conf
+data:
+  GEOIPUPDATE_EDITION_IDS: GeoLite2-City
+  GEOIPUPDATE_VERBOSE: 1
+  GEOIPUPDATE_PRESERVE_FILE_TIMES: 1
+  GEOIPUPDATE_FREQUENCY: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geoip-updater
+  labels:
+    app: geoip
+    part: updater
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geoip
+      part: updater
+  template:
+    metadata:
+      annotations:
+        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
+      labels:
+        app: geoip
+        part: updater
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: geoip-data
+      containers:
+        - name: updater
+          image: maxmindinc/geoipupdate
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/usr/share/GeoIP"
+              name: data
+          envFrom:
+            - configMapRef:
+                name: geoip-updater-conf
+            - secretRef:
+                name: geoip-updater-creds
+              prefix: "GEOIPUPDATE_"

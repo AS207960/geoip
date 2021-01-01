@@ -1,0 +1,38 @@
+syntax = "proto3";
+package geoip;
+import "google/protobuf/wrappers.proto";
+
+message GeoIPRequest {
+  oneof message {
+    IPLookupRequest ip_lookup = 1;
+  }
+}
+
+
+message IPLookupRequest {
+  oneof ip_addr {
+    fixed32 ipv4_addr = 1;
+    bytes ipv6_addr = 2;
+  }
+}
+
+message IPLookupResponse {
+  message IPLookupData {
+    google.protobuf.StringValue country = 1;
+    google.protobuf.StringValue postal_code = 2;
+    google.protobuf.StringValue time_zone = 3;
+    google.protobuf.UInt32Value metro_code = 4;
+    google.protobuf.DoubleValue latitude = 5;
+    google.protobuf.DoubleValue longitude = 6;
+    repeated string subdivisions = 7;
+  }
+
+  enum IPLookupStatus {
+    UNKNOWN = 0;
+    OK = 1;
+    NOT_FOUND = 2;
+  }
+
+  IPLookupStatus status = 1;
+  IPLookupData data = 2;
+}

@@ -1,0 +1,19 @@
+[package]
+name = "as207960_geoip"
+version = "0.1.0"
+authors = ["Q <q@misell.cymru>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+maxminddb = "0.17"
+amiquip = "0.4"
+log = "0.4"
+pretty_env_logger = "0.4"
+prost = "0.7"
+prost-types = "0.7"
+notify = "4"
+
+[build-dependencies]
+prost-build = "0.7"
