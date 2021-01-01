@@ -15,8 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8b28f439-f77e-43a2-bee1-8b3a86b67abf" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/build.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kube.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/proto/geoip.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kube.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/kube.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +81,7 @@
       <option name="presentableId" value="Default" />
       <updated>1609431736620</updated>
       <workItem from="1609431738437" duration="3911000" />
-      <workItem from="1609509553642" duration="5464000" />
+      <workItem from="1609509553642" duration="6089000" />
     </task>
     <servers />
   </component>
