@@ -3,6 +3,7 @@ extern crate log;
 
 use prost::Message;
 use notify::Watcher;
+use std::convert::TryInto;
 
 mod proto {
     include!(concat!(env!("OUT_DIR"), "/geoip.rs"));
@@ -75,6 +76,9 @@ fn main() {
                                 let addr = match ip_lookup_request.ip_addr {
                                     Some(proto::ip_lookup_request::IpAddr::Ipv4Addr(v4_addr_int)) => {
                                         std::net::IpAddr::V4(std::net::Ipv4Addr::from(v4_addr_int))
+                                    },
+                                    Some(proto::ip_lookup_request::IpAddr::Ipv6Addr(v6_addr_bytes)) => {
+                                        std::net::IpAddr::V6(std::net::Ipv6Addr::from(TryInto::<[u8; 16]>::try_into(&v6_addr_bytes[1..16]).unwrap()))
                                     },
                                     _ => {
                                         rpc_consumer.nack(delivery, false).unwrap();
