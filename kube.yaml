@@ -26,6 +26,7 @@ metadata:
   name: geoip-rpc-conf
 data:
   GEOIP_DATA_FILE: "/data/GeoLite2-City.mmdb"
+  RUST_LOG: "info"
 ---
 apiVersion: apps/v1
 kind: Deployment
