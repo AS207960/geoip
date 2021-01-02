@@ -78,7 +78,7 @@ fn main() {
                                         std::net::IpAddr::V4(std::net::Ipv4Addr::from(v4_addr_int))
                                     },
                                     Some(proto::ip_lookup_request::IpAddr::Ipv6Addr(v6_addr_bytes)) => {
-                                        std::net::IpAddr::V6(std::net::Ipv6Addr::from(TryInto::<[u8; 16]>::try_into(&v6_addr_bytes[1..16]).unwrap()))
+                                        std::net::IpAddr::V6(std::net::Ipv6Addr::from(TryInto::<[u8; 16]>::try_into(&v6_addr_bytes[0..16]).unwrap()))
                                     },
                                     _ => {
                                         rpc_consumer.nack(delivery, false).unwrap();
