@@ -94,7 +94,7 @@ spec:
             claimName: geoip-data
       containers:
         - name: updater
-          image: as207960/geoip:2
+          image: as207960/geoip:3
           imagePullPolicy: Always
           volumeMounts:
             - mountPath: "/data"
