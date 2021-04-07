@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b28f439-f77e-43a2-bee1-8b3a86b67abf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +79,7 @@
       <updated>1609431736620</updated>
       <workItem from="1609431738437" duration="3911000" />
       <workItem from="1609509553642" duration="9394000" />
-      <workItem from="1609608825946" duration="16000" />
+      <workItem from="1609608825946" duration="89000" />
     </task>
     <servers />
   </component>
@@ -99,6 +99,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="655" y="350" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1609608892743">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="655" y="350" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1609608892743" />
     <state x="623" y="246" width="672" height="678" key="search.everywhere.popup" timestamp="1609509630515">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>

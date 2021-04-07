@@ -104,3 +104,15 @@ spec:
                 name: geoip-rpc-conf
             - secretRef:
                 name: geoip-rpc-creds
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: geoip
+spec:
+  podSelector:
+    matchLabels:
+      app: geoip
+      part: nginx
+  policyTypes:
+  - Ingress
