@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: geoip-data
+  name: geoip-test-data
 spec:
   storageClassName: standard
   accessModes:
@@ -13,46 +13,36 @@ spec:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: geoip-updater-conf
-data:
-  GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
-  GEOIPUPDATE_VERBOSE: "1"
-  GEOIPUPDATE_PRESERVE_FILE_TIMES: "1"
-  GEOIPUPDATE_FREQUENCY: "1"
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: geoip-rpc-conf
+  name: geoip-test-rpc-conf
 data:
   GEOIP_DATA_FILE: "/data/GeoLite2-City.mmdb"
-  RUST_LOG: "info"
+  RUST_LOG: "debug"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: geoip-updater
+  name: geoip-test-updater
   labels:
-    app: geoip
+    app: geoip-test
     part: updater
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: geoip
+      app: geoip-test
       part: updater
   template:
     metadata:
       annotations:
         cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
       labels:
-        app: geoip
+        app: geoip-test
         part: updater
     spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: geoip-data
+            claimName: geoip-test-data
       containers:
         - name: updater
           image: maxmindinc/geoipupdate
@@ -70,28 +60,28 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: geoip-rpc
+  name: geoip-test-rpc
   labels:
-    app: geoip
+    app: geoip-test
     part: rpc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: geoip
+      app: geoip-test
       part: rpc
   template:
     metadata:
       annotations:
         cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
       labels:
-        app: geoip
+        app: geoip-test
         part: rpc
     spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: geoip-data
+            claimName: geoip-test-data
       containers:
         - name: updater
           image: as207960/geoip:3
@@ -101,17 +91,17 @@ spec:
               name: data
           envFrom:
             - configMapRef:
-                name: geoip-rpc-conf
+                name: geoip-test-rpc-conf
             - secretRef:
-                name: geoip-rpc-creds
+                name: geoip-test-rpc-creds
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: geoip
+  name: geoip-test
 spec:
   podSelector:
     matchLabels:
-      app: geoip
+      app: geoip-test
   policyTypes:
   - Ingress
