@@ -32,13 +32,26 @@ fn main() {
     pretty_env_logger::init();
 
     let (watcher_tx, watcher_rx) = std::sync::mpsc::channel();
-    let mut watcher = notify::watcher(watcher_tx, std::time::Duration::from_secs(10)).unwrap();
 
     let mmdb_reader = std::sync::Arc::new(std::sync::Mutex::new(
         maxminddb::Reader::open_readfile(std::env::var("GEOIP_DATA_FILE").unwrap()).unwrap()
     ));
     let watcher_mmdb_reader = mmdb_reader.clone();
-    watcher.watch(std::env::var("GEOIP_DATA_FILE").unwrap(), notify::RecursiveMode::NonRecursive).unwrap();
+
+    std::thread::spawn(move || {
+        loop {
+            if match notify::watcher(watcher_tx.clone(), std::time::Duration::from_secs(10)) {
+                Ok(mut w) => match w.watch(std::env::var("GEOIP_DATA_FILE").unwrap(), notify::RecursiveMode::NonRecursive) {
+                    Ok(_) => true,
+                    Err(_) => false
+                }
+                Err(_) => false
+            } {
+                break;
+            }
+            std::thread::sleep(std::time::Duration::from_secs(5));        
+        }
+    });
 
     std::thread::spawn(|| {
         db_watcher_thread(watcher_mmdb_reader, watcher_rx)
